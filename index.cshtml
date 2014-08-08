@@ -1,0 +1,29 @@
+﻿@{
+    Layout = "~/_SiteLayout.cshtml";
+    Page.Title = "Benficiarios";
+}
+
+@section featured {
+<section class="featured">
+    <div class="content-wrapper">
+        <hgroup class="title">
+            <h1>@Page.Title</h1>
+            <h2>Estados</h2>
+        </hgroup>
+            @{
+                var db = Database.Open("OracleConnectionString");
+                var rec = db.Query("SELECT NUM_POLIZA, RUT_BENEFICIARIO, NUM_SINIESTRO FROM BENEF_FACTA");
+            }
+            <table>
+                @foreach (var row in rec)
+                {
+                    <tr>
+                        <td>@row.NUM_POLIZA</td>
+                        <td>@row.RUT_BENEFICIARIO</td>
+                        <td>@row.NUM_SINIESTRO</td>
+                    </tr>
+                }
+            </table>
+    </div>
+</section>
+}

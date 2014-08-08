@@ -1,0 +1,188 @@
+﻿@{
+    
+}
+
+<!DOCTYPE html>
+
+<style type="text/css">
+    .classname {
+	    -moz-box-shadow:inset 0px 7px 15px 0px #ffffff;
+	    -webkit-box-shadow:inset 0px 7px 15px 0px #ffffff;
+	    box-shadow:inset 0px 7px 15px 0px #ffffff;
+	    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf) );
+	    background:-moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );
+	    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf');
+	    background-color:#ededed;
+	    -webkit-border-top-left-radius:42px;
+	    -moz-border-radius-topleft:42px;
+	    border-top-left-radius:42px;
+	    -webkit-border-top-right-radius:42px;
+	    -moz-border-radius-topright:42px;
+	    border-top-right-radius:42px;
+	    -webkit-border-bottom-right-radius:42px;
+	    -moz-border-radius-bottomright:42px;
+	    border-bottom-right-radius:42px;
+	    -webkit-border-bottom-left-radius:42px;
+	    -moz-border-radius-bottomleft:42px;
+	    border-bottom-left-radius:42px;
+	    text-indent:0px;
+	    border:2px solid #D1CECE;
+	    display:inline-block;
+	    color:#777777;
+	    margin-top:15px;
+	    font-family:Arial;
+	    font-size:12px;
+	    font-weight:bold;
+	    font-style:normal;
+	    height:30px;
+	    line-height:24px;
+	    width:144px;
+	    text-decoration:none;
+	    text-align:center;
+	    text-shadow:0px 0px 0px #ffffff;
+    }
+    .classname:hover {
+	    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #dfdfdf), color-stop(1, #ededed) );
+	    background:-moz-linear-gradient( center top, #dfdfdf 5%, #ededed 100% );
+	    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed');
+	    background-color:#dfdfdf;
+    }.classname:active {
+	    position:relative;
+	    top:1px;
+    }
+
+    table { 
+   
+      max-width:100%;
+      border-collapse: collapse;
+      font-size:13px;
+      overflow:auto;
+      font-family:Arial, Helvetica, sans-serif;
+      margin:0px auto;
+  
+    }
+    Zebra striping
+    tr:nth-of-type(odd) { 
+      background: #eee; 
+    }
+    th { 
+      background: rgb(0, 119, 212); 
+      color: white; 
+      font-weight: bold; 
+    }
+    td, th { 
+      padding: 5px; 
+      border: 1px solid #ccc; 
+      text-align: left; 
+    }
+
+    @@media 
+    only screen and (max-width: 760px),
+    (min-device-width: 768px) and (max-device-width: 1024px)  {
+
+	    Force table to not be like tables anymore
+	    table, thead, tbody, th, td, tr { 
+		    display: block; 
+	    }
+	
+	    Hide table headers (but not display: none;, for accessibility)
+	    thead tr { 
+		    position: absolute;
+		    top: -9999px;
+		    left: -9999px;
+	    }
+	
+	    tr { border: 1px solid #ccc; }
+	
+	    td { 
+		    Behave  like a "row"
+		    border: none;
+		    border-bottom: 1px solid #eee; 
+		    position: relative;
+		    padding-left: 50%; 
+	    }
+	
+	    td:before { 
+		    Now like a table header
+		    position: absolute;
+		    Top/left values mimic padding
+		    top: 6px;
+		    left: 6px;
+		    width: 45%; 
+		    padding-right: 10px; 
+		    white-space: nowrap;
+	    }
+	
+	    Label the data
+	    td:nth-of-type(1):before { content: "ESCENARIO ID"; }
+	    td:nth-of-type(2):before { content: "TIPO"; }
+	    td:nth-of-type(3):before { content: "PLAN GRUPO"; }
+	    td:nth-of-type(4):before { content: "PERIODO INI"; }
+	    td:nth-of-type(5):before { content: "PERIODO FIN"; }
+	    td:nth-of-type(6):before { content: "PERIODO BSINIESTRO"; }
+	    td:nth-of-type(7):before { content: "PERIODO PUNICA"; }
+	    td:nth-of-type(8):before { content: "PERIODO PVIGENTE"; }
+	    td:nth-of-type(9):before { content: "ESTADO ESCENARIO"; }
+	    td:nth-of-type(10):before { content: "DESC ESCENARIO"; }
+	    td:nth-of-type(11):before { content: "FECHA PROCESO"; }
+
+    }
+</style>
+
+<html lang="es">
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta charset="utf-8" />
+
+        <title>@Page.Title - Metlife</title>
+
+        <link href="~/Content/themes/base/jquery.ui.all.css" rel="stylesheet" type="text/css" />
+        <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+        <script src="~/Scripts/jquery-1.8.2.min.js"></script>
+        <script src="~/Scripts/jquery-ui-1.8.24.js"></script>
+        <script src="~/Scripts/modernizr-2.6.2.js"></script>
+
+        <meta name="viewport" content="width=device-width" />
+    </head>
+
+    <body>
+        <header>
+            <div class="content-wrapper">
+                <div class="float-left">
+                    <p class="site-title"><a href="http://www.metlife.cl"><img src="Images/MetLife_Logo.png" alt="www.metlife.cl" height="64"></a></p>
+                </div>
+                <div class="float-right">
+                    <section id="login">
+                        <br><br>
+                    </section>
+                    <nav>
+                        <ul id="menu" style="">
+                            <li><a href="~/">Inicio</a></li>
+                            <li><a href="~/About">Acerca de</a></li>
+                            <li><a href="~/Contact">Contacto</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </header>
+        <div id="body">
+            @RenderSection("featured", required: false)
+            <section class="content-wrapper main-content clear-fix">
+                @RenderBody()
+            </section>
+        </div>
+        <footer>
+            <div class="content-wrapper">
+                <div class="float-left">
+                    <p>&copy; @DateTime.Now.Year - Global Integrator</p>
+                </div>
+            </div>
+        </footer>
+        @RenderSection("Scripts", required: false)
+    </body>
+    </body>
+
+</html>
