@@ -1,14 +1,6 @@
 ﻿@{
     Layout = "~/_SiteLayout.cshtml";
     Page.Title = "Benficiarios";
-
-    var db = Database.Open("OracleConnectionString");
-
-    var query = "SELECT benef_facta.NUM_POLIZA, benef_facta.RUT_BENEFICIARIO, benef_facta.NUM_SINIESTRO, benef_facta_estado.NAME_ESTADO FROM benef_facta, benef_facta_estado WHERE benef_facta.FK_ID_ESTADO = benef_facta_estado.ID_ESTADO";
-    
-    var data = db.Query(query);
-
-
 }
 
 <style type="text/css">
@@ -73,7 +65,7 @@
       background: #eee; 
     }
     th { 
-      background: #7ac0da; 
+      background: rgb(0, 119, 212); 
       color: white; 
       font-weight: bold; 
     }
@@ -137,35 +129,33 @@
 </style>
 
 @section featured {
-    <section class="featured">
-        <div class="content-wrapper">
-            <hgroup class="title">
-                <h1>@Page.Title</h1>
-                <h2>Estados</h2>
-            </hgroup>
-            <div style='text-align: center;max-width:100%;width:100%;border-radius:10px; alignment-adjust: central'>
-                <table style='margin: 10px 10px 10px 10px'>
-                    <thead>
-                        <tr>
-                            <th><b>No. DE POLIZA</b></th>
-                            <th><b>RUT BENEFICIARIO</b></th>
-                            <th><b>No. DE SINIESTRO</b></th>
-                            <th><b>ESTADO</b></th>
-                            <th><b>check</b></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var row in data)
-                        {<tr>
-                            <td>@row.NUM_POLIZA</td>
-                            <td>@row.RUT_BENEFICIARIO</td>
-                            <td>@row.NUM_SINIESTRO</td>
-                            <td>@row.NAME_ESTADO</td>
-                            <td></td>
-                        </tr>}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </section>
+<section class="featured">
+    <div class="content-wrapper">
+        <hgroup class="title">
+            <h1>@Page.Title</h1>
+            <h2>Estados</h2>
+        </hgroup>
+            @{
+                var db = Database.Open("OracleConnectionString");
+                var rec = db.Query("SELECT * FROM BENEF_FACTA");
+            }
+            <table>
+                <thead>
+                     <tr>
+                        @foreach (var row in rec)
+                         {
+                            <th>@row</th>
+                         }
+                        <th><b> </b></th>
+                    </tr>
+                </thead>
+                @foreach (var row in rec)
+                 {
+                    <tr>
+                        <td>@row</td>
+                    </tr>
+                 }
+            </table>
+    </div>
+</section>
 }
