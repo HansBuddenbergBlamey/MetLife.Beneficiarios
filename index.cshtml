@@ -8,7 +8,8 @@
     
     var data = db.Query(query);
 
-
+    var count = 0;
+    var checkbox = 0;
 }
 
 <style type="text/css">
@@ -138,34 +139,58 @@
 
 @section featured {
     <section class="featured">
-        <div class="content-wrapper">
-            <hgroup class="title">
-                <h1>@Page.Title</h1>
-                <h2>Estados</h2>
-            </hgroup>
-            <div style='text-align: center;max-width:100%;width:100%;border-radius:10px; alignment-adjust: central'>
-                <table style='margin: 10px 10px 10px 10px'>
-                    <thead>
-                        <tr>
-                            <th><b>No. DE POLIZA</b></th>
-                            <th><b>RUT BENEFICIARIO</b></th>
-                            <th><b>No. DE SINIESTRO</b></th>
-                            <th><b>ESTADO</b></th>
-                            <th><b>check</b></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var row in data)
-                        {<tr>
-                            <td>@row.NUM_POLIZA</td>
-                            <td>@row.RUT_BENEFICIARIO</td>
-                            <td>@row.NUM_SINIESTRO</td>
-                            <td>@row.NAME_ESTADO</td>
-                            <td></td>
-                        </tr>}
-                    </tbody>
-                </table>
+        <form action="" method="post">
+            <div class="content-wrapper">
+                <hgroup class="title">
+                    <h1>@Page.Title</h1>
+                    <h2>Estados</h2>
+                </hgroup>
+                <div style='text-align: center;max-width:100%;width:100%;border-radius:10px;'>
+                    <br><br><br>
+                    <table class="centerTable">
+                        <thead>
+                            <tr><th><b>LINEA</b></th>
+                                <th><b>No. DE POLIZA</b></th>
+                                <th><b>RUT BENEFICIARIO</b></th>
+                                <th><b>No. DE SINIESTRO</b></th>
+                                <th><b>ESTADO</b></th>
+                                <th><b></b></th>
+                                <th><b></b></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var row in data)
+                            {
+                                count = count + 1;
+                                <tr>
+                                    <td>@count</td>
+                                    <td>@row.NUM_POLIZA</td>
+                                    <td>@row.RUT_BENEFICIARIO</td>
+                                    <td>@row.NUM_SINIESTRO</td>
+                                    <td>@row.NAME_ESTADO</td>
+                                    <td>@row.CheckBox("check")</td>
+                                    <td>@{
+                                            if (@Request["check"] == "on")
+                                            {
+                                                var Response = "Encendido";
+                                                @Response
+                                            }else{
+                                                var Response = "Apagado";
+                                                @Response
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                Check value: @Request["checkbox"]
+                             @ObjectInfo.Print(Request["checkbox"])
+                <div align="right">
+                    <input type="submit" value="Actualizar" name="submit" />
+                </div>
             </div>
-        </div>
+        </form>
     </section>
 }
