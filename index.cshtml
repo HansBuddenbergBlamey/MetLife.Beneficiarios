@@ -2,22 +2,12 @@
     Layout = "~/_SiteLayout.cshtml";
     Page.Title = "Benficiarios";
 
-
-    
     var db = Database.Open("OracleConnectionString");
-
     var query = "SELECT benef_facta.NUM_POLIZA, benef_facta.RUT_BENEFICIARIO, benef_facta.NUM_SINIESTRO, benef_facta_estado.NAME_ESTADO FROM benef_facta, benef_facta_estado WHERE benef_facta.FK_ID_ESTADO = benef_facta_estado.ID_ESTADO";
-    
     var data = db.Query(query);
-
     var count = 0;
-    
     var estados = "Select ID_ESTADO, NAME_ESTADO from benef_facta_estado";
-
     var selectedData = db.Query(estados);
-
-    var variable = @Request["check"];
-
     var chk = "off";
     var Est = "0";
     var SQL = "";
@@ -160,6 +150,7 @@
                                 var variable1 = @row.NUM_POLIZA;
                                 var variable2 = @row.RUT_BENEFICIARIO;
                                 var variable3 = @row.NUM_SINIESTRO;
+
                                 if (@Request["ESTADO"] == null)
                                     Est="0";
                                  else
@@ -169,9 +160,9 @@
                                     <td>@row.RUT_BENEFICIARIO</td>
                                     <td>@row.NUM_SINIESTRO</td>
                                     <td>@row.NAME_ESTADO</td>
-                                    <td>@Html.CheckBox("check")</td>
+                                    <td><input type="checkbox" name="chk" value="@(chk="on")" /></td>
                                         @{ SQL="update benef_facta set benef_facta.fk_id_estado=" + Est + " where benef_facta.num_poliza=" + variable1 + " and benef_facta.rut_beneficiario='" + variable2 + "' and benef_facta.num_siniestro=" + variable3 ; }
-                                        @{ if (@Request["check"] != "off") {
+                                        @{ if (chk != "off") {
                                                db.Execute(SQL);
                                                chk="off";
                                             }
@@ -181,17 +172,14 @@
                         </tbody>
                     </table>
                 </div>
+                <br>
             </div>
     </section>
 }
     <br>
     <br>
-        <!--Check value: @Request["check"]-->
-            
-
-
     <div align="right">
-        <select name="ESTADO">
+        Actualizar a : &nbsp<select name="ESTADO">
             @foreach(var combo in selectedData)
             {
                 <option value="@combo.ID_ESTADO">@combo.NAME_ESTADO</option>
