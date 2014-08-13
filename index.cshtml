@@ -136,7 +136,7 @@
 
 @section featured {
     <section class="featured">
-        <form action="" method="post">
+        <form id="frm" action="" method="post">
             <div class="content-wrapper">
                 <hgroup class="title">
                     <h1>@Page.Title</h1>
@@ -152,7 +152,6 @@
                                 <th><b>No. DE SINIESTRO</b></th>
                                 <th><b>ESTADO</b></th>
                                 <th><b>Check</b></th>
-                                <th><b>Query</b></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -165,10 +164,6 @@
                                     Est="0";
                                  else
                                     Est=@Request["ESTADO"];
-                                if (@Request["check"] == null)
-                                    chk="off";
-                                 else
-                                    chk=@Request["check"];
                                 <tr>
                                     <td>@row.NUM_POLIZA</td>
                                     <td>@row.RUT_BENEFICIARIO</td>
@@ -176,13 +171,11 @@
                                     <td>@row.NAME_ESTADO</td>
                                     <td>@Html.CheckBox("check")</td>
                                         @{ SQL="update benef_facta set benef_facta.fk_id_estado=" + Est + " where benef_facta.num_poliza=" + variable1 + " and benef_facta.rut_beneficiario='" + variable2 + "' and benef_facta.num_siniestro=" + variable3 ; }
-                                    <td>@{ if (@chk == "on") {
+                                        @{ if (@Request["check"] != "off") {
                                                db.Execute(SQL);
                                                chk="off";
                                             }
                                         }
-                                        @SQL
-                                    </td>
                                 </tr>
                             }
                         </tbody>
@@ -205,6 +198,6 @@
             }
             @db.Execute("commit")
         </select>
-        <input type="submit" value="Actualizar" name="submit" />
+        <input type="submit" value="Actualizar" name="submit" onclick="frm"/>
     </div>
 </form>
