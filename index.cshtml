@@ -18,6 +18,8 @@
 
     var variable = @Request["check"];
 
+    var chk = "off";
+    var Est = "0";
     var SQL = "";
 }
 
@@ -145,13 +147,12 @@
                     <table class="centerTable">
                         <thead>
                             <tr>
-                                <th><b>LINEA</b></th>
                                 <th><b>No. DE POLIZA</b></th>
                                 <th><b>RUT BENEFICIARIO</b></th>
                                 <th><b>No. DE SINIESTRO</b></th>
                                 <th><b>ESTADO</b></th>
-                                <th><b>check</b></th>
-                                <th><b>check</b></th>
+                                <th><b>Check</b></th>
+                                <th><b>Query</b></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -160,21 +161,29 @@
                                 var variable1 = @row.NUM_POLIZA;
                                 var variable2 = @row.RUT_BENEFICIARIO;
                                 var variable3 = @row.NUM_SINIESTRO;
+                                if (@Request["ESTADO"] == null)
+                                    Est="0";
+                                 else
+                                    Est=@Request["ESTADO"];
+                                if (@Request["check"] == null)
+                                    chk="off";
+                                 else
+                                    chk=@Request["check"];
                                 <tr>
-                                    <td>@count</td>
                                     <td>@row.NUM_POLIZA</td>
                                     <td>@row.RUT_BENEFICIARIO</td>
                                     <td>@row.NUM_SINIESTRO</td>
                                     <td>@row.NAME_ESTADO</td>
-                                    <td><input type="checkbox" name="check" class="check" value="@{
-                                            variable1 = @row.NUM_POLIZA;
-                                            variable2 = @row.RUT_BENEFICIARIO;
-                                            variable3 = @row.NUM_SINIESTRO;
-                                            SQL=@Request["myList"];
-                                         }"/></td>
-                                    <td>@db.Execute("update benef_facta set benef_facta.fk_id_estado=@SQL where benef_facta.num_poliza=@row.NUM_POLIZA and benef_facta.rut_beneficiario='@row.RUT_BENEFICIARIO' and benef_facta.num_siniestro=@row.NUM_SINIESTRO")
-                                        @db.Execute("commit")
-                                          </td></tr>
+                                    <td>@Html.CheckBox("check")</td>
+                                        @{ SQL="update benef_facta set benef_facta.fk_id_estado=" + Est + " where benef_facta.num_poliza=" + variable1 + " and benef_facta.rut_beneficiario='" + variable2 + "' and benef_facta.num_siniestro=" + variable3 ; }
+                                    <td>@{ if (@chk == "on") {
+                                               db.Execute(SQL);
+                                               chk="off";
+                                            }
+                                        }
+                                        @SQL
+                                    </td>
+                                </tr>
                             }
                         </tbody>
                     </table>
@@ -184,16 +193,17 @@
 }
     <br>
     <br>
-        Check value: @Request["check"]
-            @SQL
+        <!--Check value: @Request["check"]-->
+            
 
 
     <div align="right">
-        <select name="mylist">
+        <select name="ESTADO">
             @foreach(var combo in selectedData)
             {
                 <option value="@combo.ID_ESTADO">@combo.NAME_ESTADO</option>
             }
+            @db.Execute("commit")
         </select>
         <input type="submit" value="Actualizar" name="submit" />
     </div>
