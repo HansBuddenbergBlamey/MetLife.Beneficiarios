@@ -2,6 +2,8 @@
     Layout = "~/_SiteLayout.cshtml";
     Page.Title = "Benficiarios";
 
+
+    
     var db = Database.Open("OracleConnectionString");
 
     var query = "SELECT benef_facta.NUM_POLIZA, benef_facta.RUT_BENEFICIARIO, benef_facta.NUM_SINIESTRO, benef_facta_estado.NAME_ESTADO FROM benef_facta, benef_facta_estado WHERE benef_facta.FK_ID_ESTADO = benef_facta_estado.ID_ESTADO";
@@ -9,7 +11,14 @@
     var data = db.Query(query);
 
     var count = 0;
-    var checkbox = 0;
+    
+    var estados = "Select ID_ESTADO, NAME_ESTADO from benef_facta_estado";
+
+    var selectedData = db.Query(estados);
+
+    var variable = @Request["check"];
+
+    var SQL = "";
 }
 
 <style type="text/css">
@@ -120,20 +129,6 @@
 		    padding-right: 10px; 
 		    white-space: nowrap;
 	    }
-	
-	    Label the data
-	    td:nth-of-type(1):before { content: "ESCENARIO ID"; }
-	    td:nth-of-type(2):before { content: "TIPO"; }
-	    td:nth-of-type(3):before { content: "PLAN GRUPO"; }
-	    td:nth-of-type(4):before { content: "PERIODO INI"; }
-	    td:nth-of-type(5):before { content: "PERIODO FIN"; }
-	    td:nth-of-type(6):before { content: "PERIODO BSINIESTRO"; }
-	    td:nth-of-type(7):before { content: "PERIODO PUNICA"; }
-	    td:nth-of-type(8):before { content: "PERIODO PVIGENTE"; }
-	    td:nth-of-type(9):before { content: "ESTADO ESCENARIO"; }
-	    td:nth-of-type(10):before { content: "DESC ESCENARIO"; }
-	    td:nth-of-type(11):before { content: "FECHA PROCESO"; }
-
     }
 </style>
 
@@ -149,48 +144,57 @@
                     <br><br><br>
                     <table class="centerTable">
                         <thead>
-                            <tr><th><b>LINEA</b></th>
+                            <tr>
+                                <th><b>LINEA</b></th>
                                 <th><b>No. DE POLIZA</b></th>
                                 <th><b>RUT BENEFICIARIO</b></th>
                                 <th><b>No. DE SINIESTRO</b></th>
                                 <th><b>ESTADO</b></th>
-                                <th><b></b></th>
-                                <th><b></b></th>
+                                <th><b>check</b></th>
+                                <th><b>check</b></th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var row in data)
                             {
-                                count = count + 1;
+                                var variable1 = @row.NUM_POLIZA;
+                                var variable2 = @row.RUT_BENEFICIARIO;
+                                var variable3 = @row.NUM_SINIESTRO;
                                 <tr>
                                     <td>@count</td>
                                     <td>@row.NUM_POLIZA</td>
                                     <td>@row.RUT_BENEFICIARIO</td>
                                     <td>@row.NUM_SINIESTRO</td>
                                     <td>@row.NAME_ESTADO</td>
-                                    <td>@row.CheckBox("check")</td>
-                                    <td>@{
-                                            if (@Request["check"] == "on")
-                                            {
-                                                var Response = "Encendido";
-                                                @Response
-                                            }else{
-                                                var Response = "Apagado";
-                                                @Response
-                                            }
-                                        }
-                                    </td>
-                                </tr>
+                                    <td><input type="checkbox" name="check" class="check" value="@{
+                                            variable1 = @row.NUM_POLIZA;
+                                            variable2 = @row.RUT_BENEFICIARIO;
+                                            variable3 = @row.NUM_SINIESTRO;
+                                            SQL=@Request["myList"];
+                                         }"/></td>
+                                    <td>@db.Execute("update benef_facta set benef_facta.fk_id_estado=@SQL where benef_facta.num_poliza=@row.NUM_POLIZA and benef_facta.rut_beneficiario='@row.RUT_BENEFICIARIO' and benef_facta.num_siniestro=@row.NUM_SINIESTRO")
+                                        @db.Execute("commit")
+                                          </td></tr>
                             }
                         </tbody>
                     </table>
                 </div>
-                Check value: @Request["checkbox"]
-                             @ObjectInfo.Print(Request["checkbox"])
-                <div align="right">
-                    <input type="submit" value="Actualizar" name="submit" />
-                </div>
             </div>
-        </form>
     </section>
 }
+    <br>
+    <br>
+        Check value: @Request["check"]
+            @SQL
+
+
+    <div align="right">
+        <select name="mylist">
+            @foreach(var combo in selectedData)
+            {
+                <option value="@combo.ID_ESTADO">@combo.NAME_ESTADO</option>
+            }
+        </select>
+        <input type="submit" value="Actualizar" name="submit" />
+    </div>
+</form>
