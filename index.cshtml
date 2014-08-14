@@ -1,0 +1,201 @@
+﻿@{
+    Layout = "~/_SiteLayout.cshtml";
+    Page.Title = "Benficiarios";
+
+    var db = Database.Open("OracleConnectionString");
+    var estado = "";
+     
+@* Ni idea *@
+    if(IsPost){
+        var id = Request["RowID"];
+        var arrId = id.Split(',');
+        for(int i = 0; i < arrId.Length; i++)
+        {
+            var sql = "update benef_facta set benef_facta.fk_id_estado=" + Request.Params["estado"] + " where benef_facta.ID_BENEFICIARIO=" + arrId[i];
+            db.Execute(sql);
+        }
+    }
+
+@* Grilla *@
+    var data = db.Query("SELECT benef_facta.ID_BENEFICIARIO, benef_facta.NUM_POLIZA, benef_facta.RUT_BENEFICIARIO, benef_facta.NUM_SINIESTRO, benef_facta_estado.NAME_ESTADO FROM benef_facta, benef_facta_estado WHERE benef_facta.FK_ID_ESTADO = benef_facta_estado.ID_ESTADO");
+    var grid = new WebGrid(source:data, rowsPerPage:10, ajaxUpdateContainerId:"grid");
+
+@* DropBox *@
+    var selectedData = db.Query("Select ID_ESTADO, NAME_ESTADO from benef_facta_estado");
+
+}
+
+<style type="text/css">
+        .classname {
+	        -moz-box-shadow:inset 0px 7px 15px 0px #ffffff;
+	        -webkit-box-shadow:inset 0px 7px 15px 0px #ffffff;
+	        box-shadow:inset 0px 7px 15px 0px #ffffff;
+	        background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf) );
+	        background:-moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );
+	        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf');
+	        background-color:#ededed;
+	        -webkit-border-top-left-radius:42px;
+	        -moz-border-radius-topleft:42px;
+	        border-top-left-radius:42px;
+	        -webkit-border-top-right-radius:42px;
+	        -moz-border-radius-topright:42px;
+	        border-top-right-radius:42px;
+	        -webkit-border-bottom-right-radius:42px;
+	        -moz-border-radius-bottomright:42px;
+	        border-bottom-right-radius:42px;
+	        -webkit-border-bottom-left-radius:42px;
+	        -moz-border-radius-bottomleft:42px;
+	        border-bottom-left-radius:42px;
+	        text-indent:0px;
+	        border:2px solid #D1CECE;
+	        display:inline-block;
+	        color:#777777;
+	        margin-top:15px;
+	        font-family:Arial;
+	        font-size:12px;
+	        font-weight:bold;
+	        font-style:normal;
+	        height:30px;
+	        line-height:24px;
+	        width:144px;
+	        text-decoration:none;
+	        text-align:center;
+	        text-shadow:0px 0px 0px #ffffff;
+        }
+        .classname:hover {
+	        background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #dfdfdf), color-stop(1, #ededed) );
+	        background:-moz-linear-gradient( center top, #dfdfdf 5%, #ededed 100% );
+	        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed');
+	        background-color:#dfdfdf;
+        }.classname:active {
+	        position:relative;
+	        top:1px;
+        }
+
+        table { 
+   
+          max-width:100%;
+          border-collapse: collapse;
+          font-size:13px;
+          overflow:auto;
+          font-family:Arial, Helvetica, sans-serif;
+          margin:0px auto;
+  
+        }
+        Zebra striping
+        tr:nth-of-type(odd) { 
+          background: #eee; 
+        }
+        th { 
+          background: #7ac0da; 
+          color: white; 
+          font-weight: bold; 
+        }
+        td, th { 
+          padding: 5px; 
+          border: 1px solid #ccc; 
+          text-align: left; 
+        }
+    
+    input[type="submit"],
+    input[type="button"],
+    button {
+        background-color: #d3dce0;
+        border: 1.2px solid #787878;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: 400;
+        padding: 4px;
+        margin-right: 4px;
+        width: auto;
+    }
+
+    td input[type="submit"],
+    td input[type="button"],
+    td button {
+        font-size: 1.2em;
+        padding: 4px;
+        margin-right: 4px;
+    }
+
+        @@media 
+        only screen and (max-width: 760px),
+        (min-device-width: 768px) and (max-device-width: 1024px)  {
+
+	        Force table to not be like tables anymore
+	        table, thead, tbody, th, td, tr { 
+		        display: block; 
+	        }
+	
+	        Hide table headers (but not display: none;, for accessibility)
+	        thead tr { 
+		        position: absolute;
+		        top: -9999px;
+		        left: -9999px;
+	        }
+	
+	        tr { border: 1px solid #ccc; }
+	
+	        td { 
+		        Behave  like a "row"
+		        border: none;
+		        border-bottom: 1px solid #eee; 
+		        position: relative;
+		        padding-left: 50%; 
+	        }
+	
+	        td:before { 
+		        Now like a table header
+		        position: absolute;
+		        Top/left values mimic padding
+		        top: 6px;
+		        left: 6px;
+		        width: 45%; 
+		        padding-right: 10px; 
+		        white-space: nowrap;
+	        }
+        }
+</style>
+
+@section featured {
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h1>@Page.Title</h1>
+                <h2>Estados</h2>
+            </hgroup>
+            <div style='text-align: center;max-width:100%;width:100%;border-radius:10px;'>
+                <br><br><br>
+                <form method="post" action="">
+                    <br>
+                    @grid.GetHtml(
+                        tableStyle:"grid",
+                        headerStyle:"head",
+                        alternatingRowStyle:"alt",
+                        columns: grid.Columns(
+                            grid.Column("ID_BENEFICIARIO"),
+                            grid.Column("NUM_POLIZA", "No. POLIZA", style:"tdId"),
+                            grid.Column("RUT_BENEFICIARIO", "RUT BENEFICIARIO", style: "tdStyle"),
+                            grid.Column("NUM_SINIESTRO", "No. DE SINIESTRO", style: "tdStyle"),
+                            grid.Column("NAME_ESTADO", "ESTADO", style: "tdStyle"),
+                            grid.Column(header:"", format:@<input type="checkbox" name="RowId" value="@item.ID_BENEFICIARIO"/>)))
+                <!--</form>-->
+            </div>
+        </div>
+    </section>
+}
+    
+    <br><br>
+    <div align="right">
+        Actualizar a : &nbsp
+        <!--<form method="post" action="">-->
+            <select name="ESTADO">
+                <option selected="selected" disabled="disabled">Seleccione Estado</option>
+                @foreach(var combo in selectedData)
+                {
+                    <option id="comboEstado" value="@combo.ID_ESTADO">@combo.NAME_ESTADO</option>
+                }
+            </select>
+            &nbsp&nbsp&nbsp<input type="submit" value="Actualizar" name="submit"/>
+        </form>
+    </div>
